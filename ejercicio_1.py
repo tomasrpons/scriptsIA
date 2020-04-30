@@ -2,10 +2,10 @@ import numpy as np
 
 
 class Vector:
-    def __init__(self, vector):
+    def __init__(self, vector,q):
         self.vector_entero = vector
         self.vector = np.delete(vector,3)
-        self.dis = np.linalg.norm(self.vector-np.array([6,2,7]))
+        self.dis = np.linalg.norm(self.vector-q)
     
 
 def bubbleSort(nlist):
@@ -17,12 +17,20 @@ def bubbleSort(nlist):
                 nlist[i+1] = temp
     return nlist
 
+
 def main():
+    print("-"*20)
+    entrada = input("Introduzca los valores de Q (3 valores separados por comas): ")
+    entrada = entrada.split(",")
+    for i in range(len(entrada)):
+        entrada[i] = int(entrada[i])
+    q = np.array(entrada)
+        
     array = []
     datos = np.load('calificaciones_pelis.npy')
 
     for i in range(len(datos)):
-        v = Vector(datos[i])
+        v = Vector(datos[i],q)
         array.append(v)
 
     vectores = bubbleSort(array)
@@ -30,7 +38,7 @@ def main():
 
     aux = 0
     for i in range(len(ganadores)):
-        aux += ganadores[i].vector_entero[3]
+        aux += ganadores[i].vector_entero[-1]
     promedio = aux/3
 
     print("La prediccion de puntaje de la pelicula 4 para Q es de: ", promedio)
