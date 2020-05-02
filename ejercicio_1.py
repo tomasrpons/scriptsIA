@@ -4,7 +4,7 @@ import numpy as np
 class Vector:
     def __init__(self, vector,q):
         self.vector_entero = vector
-        self.vector = np.delete(vector,3)
+        self.vector = np.delete(vector,-1)
         self.dis = np.linalg.norm(self.vector-q)
     
 
@@ -19,29 +19,45 @@ def bubbleSort(nlist):
 
 
 def main():
+
     print("-"*20)
-    entrada = input("Introduzca los valores de Q (3 valores separados por comas): ")
-    entrada = entrada.split(",")
-    for i in range(len(entrada)):
-        entrada[i] = int(entrada[i])
-    q = np.array(entrada)
+
+    cant= int(input('Introduzca la cantidad de usuarios con valores conocidos: '))
+
+    cant_vecinos = int(input('Introduzca la cantidad de vecinos mas cercanos: '))
+
+    vec=[]
+
+    for i in range(cant):
+
+        aux=input('Introduzca las calificaciones para el usuario %i: '%(i+1) ).split(',')
+
+        for j in range(len(aux)):
+
+            aux[j] = int(aux[j])
+        vec.append(aux)
+    datos=np.array(vec)
+
+    q = input("Introduzca los valores de Q (valores separados por comas): ").split(",")
+
+    for i in range(len(q)):
+        q[i] = int(q[i])
         
     array = []
-    datos = np.load('calificaciones_pelis.npy')
 
     for i in range(len(datos)):
         v = Vector(datos[i],q)
         array.append(v)
 
     vectores = bubbleSort(array)
-    ganadores = vectores[:3]
+    ganadores = vectores[:cant_vecinos]
 
     aux = 0
     for i in range(len(ganadores)):
         aux += ganadores[i].vector_entero[-1]
-    promedio = aux/3
+    promedio = aux/cant_vecinos
 
-    print("La prediccion de puntaje de la pelicula 4 para Q es de: ", promedio)
+    print("La prediccion de puntaje de la pelicula  para Q es de: ", promedio)
 
 
 if __name__ == "__main__":
